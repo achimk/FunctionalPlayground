@@ -313,6 +313,15 @@ test("Result") {
     expectTrue(r.isFailure)
 }
 
+test("Result+Zip") {
+    struct TestError: Swift.Error { }
+    func sum(_ l: Int, _ r: Int) -> Int { return l + r }
+    let l = Result<Int, TestError>(1)
+    let r = Result<Int, TestError>(2)
+    let s = Result.zip(l, r).map(sum)
+    expectEqual(s.value, 3)
+}
+
 runAllTests()
 
 //: [Next](@next)
