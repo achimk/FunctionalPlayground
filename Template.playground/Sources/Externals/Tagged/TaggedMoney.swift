@@ -1,4 +1,3 @@
-import Foundation
 
 public enum CentsTag {}
 /// A type that represents cents, i.e. one hundredth of a dollar.

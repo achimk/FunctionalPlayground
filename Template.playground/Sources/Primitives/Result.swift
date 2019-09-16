@@ -1,14 +1,5 @@
 import Foundation
 
-// TODO: In future, when migrating to Swift 5
-// we can safely remove base implemetation for Result
-public enum Result<Success, Failure: Swift.Error> {
-    
-    case success(Success)
-    
-    case failure(Failure)
-}
-
 extension Result {
     
     public init(_ value: Success) {
@@ -17,25 +8,6 @@ extension Result {
     
     public init(_ error: Failure) {
         self = .failure(error)
-    }
-}
-
-extension Result {
-    
-    public func map<U>(_ f: (Success) -> U) -> Result<U, Failure> {
-        return flatMap { .success(f($0)) }
-    }
-    
-    public func mapError<E: Swift.Error>(_ f: (Failure) -> E) -> Result<Success, E> {
-        return flatMapError { .failure(f($0)) }
-    }
-    
-    public func flatMap<U>(_ f: (Success) -> Result<U, Failure>) -> Result<U, Failure> {
-        return analyze(ifSuccess: f, ifFailure: Result<U, Failure>.failure)
-    }
-    
-    public func flatMapError<E: Swift.Error>(_ f: (Failure) -> Result<Success, E>) -> Result<Success, E> {
-        return analyze(ifSuccess: Result<Success, E>.success, ifFailure: f)
     }
 }
 
@@ -84,13 +56,6 @@ extension Result where Success == Void {
 }
 
 extension Result {
-    
-    public func determineValue() throws -> Success {
-        switch self {
-        case .success(let value): return value
-        case .failure(let error): throw error
-        }
-    }
     
     public func throwsIfFailure() throws {
         switch self {

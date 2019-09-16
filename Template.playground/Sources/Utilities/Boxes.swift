@@ -24,10 +24,10 @@ public struct WeakBox: Hashable {
         self.inner = inner
     }
     
-    public var hashValue: Int {
-        return inner.map { ObjectIdentifier($0).hashValue } ?? 0
+    public func hash(into hasher: inout Hasher) {
+        return inner.ifPresent { ObjectIdentifier($0).hash(into: &hasher) }
     }
-    
+
     public static func ==(lhs: WeakBox, rhs: WeakBox) -> Bool {
         return lhs.inner === rhs.inner
     }
